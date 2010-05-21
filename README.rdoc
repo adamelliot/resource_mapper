@@ -1,4 +1,4 @@
-= dataresource
+= ResourceMapper
 
 Description goes here.
 
