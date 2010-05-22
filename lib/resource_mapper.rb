@@ -7,6 +7,8 @@ module ResourceMapper
   SINGLETON_ACTIONS = (ACTIONS - [:index]).freeze
   FAILABLE_ACTIONS  = (ACTIONS - [:index]).freeze
   NAME_ACCESSORS    = [:model_name, :route_name, :object_name]
+  
+  autoload :Controller, 'resource_mapper/controller'
 end
 
 require 'sinatra/resource'

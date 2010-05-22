@@ -27,7 +27,19 @@ Gem::Specification.new do |s|
      "examples/example_helper.rb",
      "examples/resource_mapper_example.rb",
      "lib/resource_mapper.rb",
-     "lib/sinatra/resource.rb"
+     "lib/resource_mapper/accessors.rb",
+     "lib/resource_mapper/action_options.rb",
+     "lib/resource_mapper/actions.rb",
+     "lib/resource_mapper/class_methods.rb",
+     "lib/resource_mapper/controller.rb",
+     "lib/resource_mapper/failable_options.rb",
+     "lib/resource_mapper/helpers.rb",
+     "lib/resource_mapper/helpers/current_objects.rb",
+     "lib/resource_mapper/helpers/internal.rb",
+     "lib/resource_mapper/helpers/nested.rb",
+     "lib/resource_mapper/response_collector.rb",
+     "lib/sinatra/resource.rb",
+     "resource_mapper.gemspec"
   ]
   s.homepage = %q{http://github.com/adamelliot/resource_mapper}
   s.rdoc_options = ["--charset=UTF-8"]
