@@ -17,15 +17,14 @@ module Sinatra
         end
 
         include ResourceMapper::Controller
-
       end_eval
 
-      setup_rouces(model, klass.new)
+      setup_routes(model, klass.new)
     end
 
     private
-      def setup_routes(model, resoruce)
-        name = model.class.demodulize.downcase
+      def setup_routes(model, resource)
+        name = model.class.to_s.demodulize.downcase
 
         get     "/#{name.pluralize}", resource.method(:index)
         get     "/#{name}/:id",       resource.method(:show)

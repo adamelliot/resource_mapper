@@ -1,6 +1,6 @@
 module ResourceMapper
   class FailableActionOptions
-    extend ResourceController::Accessors
+    extend ResourceMapper::Accessors
     
     scoping_reader :success, :fails
     alias_method :failure, :fails
