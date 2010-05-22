@@ -17,9 +17,9 @@ module ResourceMapper
   autoload :ResponseCollector,      'resource_mapper/response_collector'
 
   module Helpers
-    autoload :Internal,       'resource_mapper/controller/internal'
-    autoload :Nested,         'resource_mapper/controller/nested'
-    autoload :CurrentObjects, 'resource_mapper/controller/current_objects'
+    autoload :Internal,       'resource_mapper/helpers/internal'
+    autoload :Nested,         'resource_mapper/helpers/nested'
+    autoload :CurrentObjects, 'resource_mapper/helpers/current_objects'
 
     include ResourceMapper::Helpers::Internal
     include ResourceMapper::Helpers::Nested

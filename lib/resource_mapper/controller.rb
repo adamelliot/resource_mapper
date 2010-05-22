@@ -1,16 +1,18 @@
 module ResourceMapper
   module Controller
     def self.included(subclass)
-      include ResourceMapper::Internal
-      include ResourceMapper::Actions
-      extend  ResourceMapper::Accessors
-      extend  ResourceMapper::ClassMethods
+      subclass.class_eval do
+        include ResourceMapper::Helpers
+        include ResourceMapper::Actions
+        extend  ResourceMapper::Accessors
+        extend  ResourceMapper::ClassMethods
       
-      class_reader_writer :belongs_to, *NAME_ACCESSORS
-      NAME_ACCESSORS.each { |accessor| send(accessor, controller_name.singularize.underscore) }
+        class_reader_writer :belongs_to, *NAME_ACCESSORS
+        NAME_ACCESSORS.each { |accessor| send(accessor, controller_name.singularize.underscore) }
 
-      ACTIONS.each do |action|
-        class_scoping_reader action, FAILABLE_ACTIONS.include?(action) ? ResourceMapper::FailableActionOptions.new : ResourceMapper::ActionOptions.new
+        ACTIONS.each do |action|
+          class_scoping_reader action, FAILABLE_ACTIONS.include?(action) ? ResourceMapper::FailableActionOptions.new : ResourceMapper::ActionOptions.new
+        end
       end
 
       init_default_actions(subclass)

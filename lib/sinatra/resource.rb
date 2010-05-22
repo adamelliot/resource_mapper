@@ -8,11 +8,11 @@ module Sinatra
     def resource(model, options = {}, &block)
       klass = Class.new
       klass.class_eval <<-"end_eval", __FILE__, __LINE__
-        def controller_name
+        def self.controller_name
           "#{model.class.to_s.demodulize.downcase.pluralize}"
         end
 
-        def model_name
+        def self.model_name
           "#{model.class.to_s.demodulize.downcase}"
         end
 

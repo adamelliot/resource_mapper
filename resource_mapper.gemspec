@@ -32,7 +32,6 @@ Gem::Specification.new do |s|
      "lib/resource_mapper/actions.rb",
      "lib/resource_mapper/class_methods.rb",
      "lib/resource_mapper/controller.rb",
-     "lib/resource_mapper/failable_options.rb",
      "lib/resource_mapper/helpers/current_objects.rb",
      "lib/resource_mapper/helpers/internal.rb",
      "lib/resource_mapper/helpers/nested.rb",
