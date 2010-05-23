@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adam Elliot"]
-  s.date = %q{2010-05-22}
+  s.date = %q{2010-05-23}
   s.description = %q{Creates a resource for a model in sinatra}
   s.email = %q{adam@adamelliot.com}
   s.extra_rdoc_files = [
