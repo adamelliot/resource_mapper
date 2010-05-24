@@ -9,16 +9,15 @@ module ResourceMapper
         # Used to actually pass the responses along to the controller's respond_to method.
         #
         def response_for(action)
-          "Action Response"
-#          respond_to do |wants|
-#            options_for(action).response.each do |method, block|
-#              if block.nil?
-#                wants.send(method)
-#              else
-#                wants.send(method) { instance_eval(&block) }
-#              end
-#            end
-#          end
+          respond_to do |wants|
+            options_for(action).response.each do |method, block|
+              if block.nil?
+                wants.send(method)
+              else
+                wants.send(method) { instance_eval(&block) }
+              end
+            end
+          end
         end
 
         # Calls the after callbacks for the action, if one is present.
@@ -53,6 +52,7 @@ module ResourceMapper
             instance_eval &block unless block.nil?
           end
         end 
+
     end
   end
 end

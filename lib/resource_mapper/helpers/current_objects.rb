@@ -14,7 +14,7 @@ module ResourceMapper
         # In order to customize the way the collection is fetched, to add something like pagination, for example, override this method.
         #
         def collection
-          end_of_association_chain.find(:all)
+          end_of_association_chain.all
         end
     
         # Returns the current param.

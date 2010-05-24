@@ -21,28 +21,26 @@ module ResourceMapper
     private
       def self.init_default_actions(klass)
         klass.class_eval do
-          index.wants.html
-
+          index.wants.json { collection.to_json }
+          
           show do
-            wants.html
-            failure.wants.html { "Member object not found." }
+            wants.json { object.to_json }
+            failure.wants.json { "BOOOM!!!" }
           end
 
           create do
-            wants.html { redirect_to object_url }
-
-            failure.wants.html { "new" }
+            wants.json { object.to_json }
+            failure.wants.json { "BOOOM!!!" }
           end
 
           update do
-            wants.html { redirect_to object_url }
-
-            failure.wants.html { "edit" }
+            wants.html { object.to_json }
+            failure.wants.json { "BOOOM!!!" }
           end
 
           destroy do
-            wants.html #{ redirect_to collection_url }
-            failure.wants.html #{ redirect_to object_url }
+            wants.json
+            failure.wants.json { "BOOM!!!" }
           end
           
           class << self

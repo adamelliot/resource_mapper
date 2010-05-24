@@ -10,7 +10,9 @@ begin
     gem.email = "adam@adamelliot.com"
     gem.homepage = "http://github.com/adamelliot/resource_mapper"
     gem.authors = ["Adam Elliot"]
-    gem.add_development_dependency "spicycode-micronaut", ">= 0"
+    gem.add_development_dependency "micronaut", ">= 0.3.0"
+    gem.add_development_dependency "rack-test", ">= 0.5.3"
+    gem.add_development_dependency "json", ">= 1.4.3"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -18,16 +20,26 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-require 'micronaut/rake_task'
-Micronaut::RakeTask.new(:examples) do |examples|
-  examples.pattern = 'examples/**/*_example.rb'
-  examples.ruby_opts << '-Ilib -Iexamples'
-end
+begin
+  require 'micronaut/rake_task'
+  Micronaut::RakeTask.new(:examples) do |examples|
+    examples.pattern = 'examples/**/*_example.rb'
+    examples.ruby_opts << '-Ilib -Iexamples -rexamples/example_helper.rb'
+  end
 
-Micronaut::RakeTask.new(:rcov) do |examples|
-  examples.pattern = 'examples/**/*_example.rb'
-  examples.rcov_opts = '-Ilib -Iexamples'
-  examples.rcov = true
+  Micronaut::RakeTask.new(:rcov) do |examples|
+    examples.pattern = 'examples/**/*_example.rb'
+    examples.rcov_opts = %[--exclude "examples/*,gems/*,db/*,/Library/Ruby/*,config/*" --text-summary  --sort coverage]
+    examples.rcov = true
+  end
+rescue
+  task :examples do
+    abort "Micronaut is not available. In order to run reek, you must: sudo gem install micronaut"
+  end
+
+  task :rcov do
+    abort "Micronaut is not available. In order to run reek, you must: sudo gem install micronaut"
+  end
 end
 
 task :examples => :check_dependencies
