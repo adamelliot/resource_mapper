@@ -34,7 +34,7 @@ module ResourceMapper
           end
 
           update do
-            wants.html { object.to_json }
+            wants.json { object.to_json }
             failure.wants.json { "BOOOM!!!" }
           end
 

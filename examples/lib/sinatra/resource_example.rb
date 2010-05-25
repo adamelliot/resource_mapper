@@ -40,6 +40,13 @@ describe Sinatra::Resource do
       Person.find(3).name.should == 'Seth'
       last_response.body.should == Person.find(3).to_json
     end
+    
+    it "deletes a record and return it's content in JSON" do
+      len = Person.all.length
+      delete '/person/3.json'
+      last_response.body.should == ""
+      Person.all.length.should == len - 1
+    end
   end
 
 end
