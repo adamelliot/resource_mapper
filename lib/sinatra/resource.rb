@@ -23,9 +23,9 @@ module Sinatra
 
     def resource(model, options = {}, &block)
       klass = Class.new
+
       klass.class_eval <<-"end_eval", __FILE__, __LINE__
         attr_accessor :request, :params, :wants
-        delegate :params, :to => :request
 
         def self.controller_name
           "#{model.to_s.demodulize.downcase.pluralize}"
@@ -45,7 +45,6 @@ module Sinatra
 
         include ResourceMapper::Controller
       end_eval
-
       setup_routes(model, klass.new)
     end
 
@@ -72,6 +71,7 @@ module Sinatra
     
       def route_handler(resource, method)
         lambda do |wants|
+          resource.params = params
           resource.request = request
           resource.wants = wants
           resource.method(method).call

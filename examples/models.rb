@@ -1,4 +1,4 @@
-# Shamelessly take from sinatra-rest
+# Shamelessly take from sinatra-rest, adjusted for JSON
 
 class Person
   attr_accessor :id
@@ -18,9 +18,17 @@ class Person
   end
 
   def save
-    #puts "save #{@id}"
+#    puts Person.all.inspect
+    if Person.find(self.id)
+#      puts "Deleting #{self.name}"
+      Person.delete(self.id)
+    else
+#      puts "Auto id: #{self.id}, #{@@people.size}"
+      self.id = self.id || @@people.size
+    end
+#    puts "save - New person"
+    
     @@people << self
-    self.id = @@people.size
   end
 
   def update_attributes(hash)
@@ -29,6 +37,10 @@ class Person
       @id = hash['id'].to_i if hash.include?('id')
       @name = hash['name'] if hash.include?('name')
     end
+  end
+  
+  def to_json(_=nil, _=nil)
+    "{\"id\":#{id.to_json},\"name\":#{name.to_json}}"
   end
 
   def self.delete(id)
@@ -40,12 +52,12 @@ class Person
 
   def self.all(criteria={})
     #puts 'all'
-    return @@people
+    @@people
   end
 
-  def self.find_by_id(id)
-    #puts "find_by_id #{id}"
-    all.find {|f| f.id == id.to_i}
+  def self.find(id)
+    #puts "find #{id}"
+    @@people.find {|f| f.id == id.to_i}
   end
 
   def self.clear!
@@ -53,10 +65,12 @@ class Person
   end
 
   def self.reset!
+#    puts "=> reset"
+
     clear!
-    Person.new(1, 'one').save
-    Person.new(2, 'two').save
-    Person.new(3, 'three').save
+    Person.new(1, 'Al').save
+    Person.new(2, 'Sol').save
+    Person.new(3, 'Alma').save
   end
 end
 

@@ -39,7 +39,7 @@ module ResourceMapper
         #   end
         #
         def object
-          @object ||= end_of_association_chain.find(param) unless param.nil?
+          @object = end_of_association_chain.find(param) unless param.nil?
           @object
         end
     
@@ -66,7 +66,7 @@ module ResourceMapper
         # Builds the object, but doesn't save it, during the new, and create action.
         #
         def build_object
-          @object ||= end_of_association_chain.send parent? ? :build : :new, object_params
+          @object = end_of_association_chain.send parent? ? :build : :new, object_params
         end
     end
   end

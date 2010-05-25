@@ -34,7 +34,7 @@ module ResourceMapper
       if object.update_attributes object_params
         after :update
         response_for :update
-      else_action
+      else
         after :update_fails
         response_for :update_fails
       end
