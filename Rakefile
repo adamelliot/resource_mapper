@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "resource_mapper"
-    gem.summary = %Q{Creates a resource for a model in sinatra}
+    gem.summary = %Q{A resource_controller derivate that brings similar functionality to Sinatra, but provides a simple way to create restful APIs}
     gem.description = %Q{Creates a resource for a model in sinatra}
     gem.email = "adam@adamelliot.com"
     gem.homepage = "http://github.com/adamelliot/resource_mapper"
