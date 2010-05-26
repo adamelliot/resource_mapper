@@ -45,13 +45,15 @@ module Sinatra
 
         include ResourceMapper::Controller
       end_eval
+      klass.class_eval &block if block_given?
       setup_routes(model, klass.new)
     end
 
     private
       def route_method_for_formats(method, path, options = {}, &block)
-        self.method(method).call "#{path}.:format", options, &method_with_format_handler(&block)
-        self.method(method).call "#{path}", options, &method_with_format_handler(&block)
+        handler = method_with_format_handler(&block)
+        self.method(method).call "#{path}.:format", options, &handler
+        self.method(method).call "#{path}", options, &handler
       end
 
       def method_with_format_handler(&block)

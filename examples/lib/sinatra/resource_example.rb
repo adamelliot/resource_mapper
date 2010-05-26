@@ -1,17 +1,24 @@
+class BasicApp < Sinatra::Base
+  register Sinatra::Resource
+  resource Person
+
+  get '/normal' do
+    puts "Normal"
+  end
+end
+
+class CustomApp < Sinatra::Base
+  register Sinatra::Resource
+  resource Person do
+    actions :all, :except => [:destroy, :update]
+  end
+end
+
 describe Sinatra::Resource do
   
   describe "basic resource" do
     def app
-      Sinatra::Application
-    end
-    
-    before do
-      Sinatra::Application.instance_eval do
-        register Sinatra::Resource
-        resource Person
-      end
-
-      @app = Sinatra::Application
+      BasicApp
     end
     
     before :each do
@@ -47,6 +54,33 @@ describe Sinatra::Resource do
       last_response.body.should == ""
       Person.all.length.should == len - 1
     end
+    
+    it "fails when requesting an invalid resource" do
+      get '/error'
+      last_response.should_not be_ok
+    end
+  end
+
+  describe "resource with actions removed" do
+    def app
+      CustomApp
+    end
+
+    before :each do
+      Person.reset!
+    end
+
+    it "errors and the records don't get altered" do
+      len = Person.all.length
+      delete '/person/1.json'
+      last_response.should_not be_ok
+      Person.all.length.should == len
+    end
+
+    it "errors on request" do
+      get '/normal'
+    end
+
   end
 
 end
