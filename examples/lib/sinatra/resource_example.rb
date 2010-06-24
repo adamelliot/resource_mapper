@@ -1,21 +1,14 @@
-class BasicApp < Sinatra::Base
-  register Sinatra::Resource
-  resource Person
-
-  get '/normal' do
-    puts "Normal"
-  end
-end
-
-class CustomApp < Sinatra::Base
-  register Sinatra::Resource
-  resource Person do
-    actions :all, :except => [:destroy, :update]
-  end
-end
-
 describe Sinatra::Resource do
   
+  class BasicApp < Sinatra::Base
+    register Sinatra::Resource
+    resource Person
+
+    get '/normal' do
+      puts "Normal"
+    end
+  end
+
   describe "basic resource" do
     def app
       BasicApp
@@ -26,12 +19,12 @@ describe Sinatra::Resource do
     end
 
     it "returns all people in JSON" do
-      get '/people.json'
+      get '/people'
       last_response.body.should == Person.all.to_json
     end
     
     it "returns a specific person as a JSON object" do
-      get '/person/2.json'
+      get '/person/2'
       last_response.body.should == Person.find(2).to_json
     end
     
@@ -61,9 +54,31 @@ describe Sinatra::Resource do
     end
   end
 
+  class ActionsRemovedApp < Sinatra::Base
+    register Sinatra::Resource
+
+    helpers do
+      def authorized!
+        true
+      end
+    end
+
+    resource Person do
+      actions :all, :except => [:destroy]
+
+      create.before do
+        object.name = object.name.upcase
+      end
+
+      update.before do
+        authorized!
+      end
+    end
+  end
+
   describe "resource with actions removed" do
     def app
-      CustomApp
+      ActionsRemovedApp
     end
 
     before :each do
@@ -77,10 +92,59 @@ describe Sinatra::Resource do
       Person.all.length.should == len
     end
 
-    it "errors on request" do
-      get '/normal'
+    it "sets the name to upper case in the before create section" do
+      post '/person.json', {:person => {:id => 4, :name => 'Adam'}}
+      last_response.should be_ok
+      Person.find(4).name.should == 'ADAM'
     end
 
+    it "allows calling of sinatra helpers from the actions in the resource" do
+      put '/person/1.json', {:person => {:name => 'Astro'}}
+      last_response.should be_ok
+      Person.find(1).name.should == 'Astro'
+    end
+  end
+
+
+  class BeforeAndAfterSetsApp < Sinatra::Base
+    register Sinatra::Resource
+
+    helpers do
+      def authorized!
+        true
+      end
+    end
+
+    resource Person do
+      before :create, :update do
+        object_params[:name].upcase!
+      end
+
+      after :show, :index do
+        Person.clear!
+      end
+    end
+  end
+
+  describe "before and after sets" do
+    def app
+      BeforeAndAfterSetsApp
+    end
+    
+    before :each do
+      Person.reset!
+    end
+
+    it "sets the same before action for create and update" do
+      post '/person.json', {:person => {:id => 4, :name => 'Adam'}}
+      last_response.should be_ok
+      Person.find(4).name.should == 'ADAM'
+
+      put '/person/4.json', {:person => {:id => 4, :name => 'Sandra'}}
+      last_response.should be_ok
+      Person.find(4).name.should == 'SANDRA'
+    end
+    
   end
 
 end

@@ -17,14 +17,17 @@ module ResourceMapper
           end_of_association_chain.all
         end
     
-        # Returns the current param.
+        # Returns the current param for key.
         # 
-        # Defaults to params[:id].
-        #
         # Override this method if you'd like to use an alternate param name.
         #
         def param
           params[:id]
+        end
+        
+        # Returns the key used for finding.
+        def key
+          :id
         end
   
         # Used to fetch the current member object in all of the singular methods that operate on an existing member.
@@ -39,7 +42,7 @@ module ResourceMapper
         #   end
         #
         def object
-          @object = end_of_association_chain.find(param) unless param.nil?
+          @object ||= end_of_association_chain.first({key => param}) unless param.nil?
           @object
         end
     
@@ -60,7 +63,9 @@ module ResourceMapper
         # Returns the form params.  Defaults to params[model_name] (i.e. params["post"])
         #
         def object_params
-          params["#{object_name}"]
+          ret = params["#{object_name}"]
+          ret.delete_if { |k, v| write_params.index(k.to_sym).nil? } unless write_params.nil?
+          ret
         end
     
         # Builds the object, but doesn't save it, during the new, and create action.
@@ -68,6 +73,10 @@ module ResourceMapper
         def build_object
           @object = end_of_association_chain.send parent? ? :build : :new, object_params
         end
+
+        def read_params ; nil end
+        def write_params ; nil end
+        
     end
   end
 end

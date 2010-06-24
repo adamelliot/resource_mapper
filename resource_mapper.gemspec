@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adam Elliot"]
-  s.date = %q{2010-05-23}
+  s.date = %q{2010-06-02}
   s.description = %q{Creates a resource for a model in sinatra}
   s.email = %q{adam@adamelliot.com}
   s.extra_rdoc_files = [
@@ -25,7 +25,8 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "examples/example_helper.rb",
-     "examples/resource_mapper_example.rb",
+     "examples/lib/sinatra/resource_example.rb",
+     "examples/models.rb",
      "lib/resource_mapper.rb",
      "lib/resource_mapper/accessors.rb",
      "lib/resource_mapper/action_options.rb",
@@ -43,24 +44,28 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/adamelliot/resource_mapper}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
-  s.summary = %q{Creates a resource for a model in sinatra}
+  s.rubygems_version = %q{1.3.7}
+  s.summary = %q{A resource_controller derivate that brings similar functionality to Sinatra, but provides a simple way to create restful APIs}
   s.test_files = [
     "examples/example_helper.rb",
-     "examples/resource_mapper_example.rb"
+     "examples/lib/sinatra/resource_example.rb",
+     "examples/models.rb"
   ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<spicycode-micronaut>, [">= 0"])
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_development_dependency(%q<micronaut>, [">= 0.3.0"])
+      s.add_development_dependency(%q<rack-test>, [">= 0.5.3"])
     else
-      s.add_dependency(%q<spicycode-micronaut>, [">= 0"])
+      s.add_dependency(%q<micronaut>, [">= 0.3.0"])
+      s.add_dependency(%q<rack-test>, [">= 0.5.3"])
     end
   else
-    s.add_dependency(%q<spicycode-micronaut>, [">= 0"])
+    s.add_dependency(%q<micronaut>, [">= 0.3.0"])
+    s.add_dependency(%q<rack-test>, [">= 0.5.3"])
   end
 end
 

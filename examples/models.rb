@@ -1,4 +1,5 @@
 # Shamelessly take from sinatra-rest, adjusted for JSON
+require 'active_support/json'
 
 class Person
   attr_accessor :id
@@ -22,10 +23,10 @@ class Person
     else
       self.id = self.id || @@people.size
     end
-    
+
     @@people << self
   end
-  
+
   def destroy
     Person.delete(self.id)
   end
@@ -41,6 +42,7 @@ class Person
   def to_json(_=nil, _=nil)
     "{\"id\":#{id.to_json},\"name\":#{name.to_json}}"
   end
+  alias_method :as_json, :to_json
 
   def self.delete(id)
     @@people.delete_if {|person| person.id == id.to_i}
@@ -52,8 +54,12 @@ class Person
     @@people
   end
 
-  def self.find(id)
+  def self.find(arg)
+    id = arg.class == Hash ? arg[:id] : arg
     @@people.find {|f| f.id == id.to_i}
+  end
+  class << self
+    alias_method :first, :find
   end
 
   def self.clear!

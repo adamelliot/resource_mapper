@@ -10,9 +10,11 @@ begin
     gem.email = "adam@adamelliot.com"
     gem.homepage = "http://github.com/adamelliot/resource_mapper"
     gem.authors = ["Adam Elliot"]
+    gem.add_dependency "sinatra", ">= 1.0"
+    gem.add_dependency "activesupport", ">= 2.3.5"
+    gem.add_dependency "mongo_mapper", ">= 0.7.6"
     gem.add_development_dependency "micronaut", ">= 0.3.0"
     gem.add_development_dependency "rack-test", ">= 0.5.3"
-    gem.add_development_dependency "json", ">= 1.4.3"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

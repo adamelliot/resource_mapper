@@ -1,6 +1,6 @@
 = ResourceMapper
 
-Description goes here.
+This project is a derivative of ResourceController. It's modified to run on Sinatra, and is used primarily to create consumable resources, not provide content directly. It's somewhat functional, but not complete and has lots of missing features.
 
 == Note on Patches/Pull Requests
  

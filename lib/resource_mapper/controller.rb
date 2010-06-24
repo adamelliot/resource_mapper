@@ -21,25 +21,27 @@ module ResourceMapper
     private
       def self.init_default_actions(klass)
         klass.class_eval do
-          index.wants.json { collection.to_json }
+          index.wants.json { collection.to_json(read_params) }
           
           show do
-            wants.json { object.to_json }
-            failure.wants.json { "BOOOM!!!" }
+            wants.json { object.to_json(read_params) }
+            failure.wants.json {
+              throw(:halt, [404, 'Not found.'])
+            }
           end
 
           create do
-            wants.json { object.to_json }
+            wants.json { object.to_json(read_params) }
             failure.wants.json { "BOOOM!!!" }
           end
 
           update do
-            wants.json { object.to_json }
+            wants.json { object.to_json(read_params) }
             failure.wants.json { "BOOOM!!!" }
           end
 
           destroy do
-            wants.json
+            wants.json { "" }
             failure.wants.json { "BOOM!!!" }
           end
           
