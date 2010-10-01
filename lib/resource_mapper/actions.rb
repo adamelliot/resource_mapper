@@ -1,12 +1,12 @@
 module ResourceMapper
   module Actions
-    
+
     def index
       load_collection
       before :index
       response_for :index
     end
-    
+
     def show
       load_object
       before :show
@@ -16,7 +16,7 @@ module ResourceMapper
     end
 
     def create
-      build_object
+      build_object(create_attrs)
       load_object
       before :create
       if object.save
@@ -31,7 +31,7 @@ module ResourceMapper
     def update
       load_object
       before :update
-      if object.update_attributes object_params
+      if object.update_attributes object_params(update_attrs)
         after :update
         response_for :update
       else
@@ -51,6 +51,6 @@ module ResourceMapper
         response_for :destroy_fails
       end
     end
-    
+
   end
 end

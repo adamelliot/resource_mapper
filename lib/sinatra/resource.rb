@@ -3,7 +3,7 @@ require 'active_support/inflector'
 
 module Sinatra
   module Resource
-    DEFAULT_FORMAT = :json
+    DEFAULT_FORMAT = :html
 
     def get_with_formats(path, options = {}, &block)
       route_method_for_formats :get, path, options, &block
@@ -27,6 +27,8 @@ module Sinatra
       klass.class_eval <<-"end_eval", __FILE__, __LINE__
         attr_accessor :app, :wants
         delegate :request, :response, :params, :session, :to => :app
+        # Link in the various view renderers
+        delegate :haml, :sass, :erb, :erubris, :builder, :less, :to => :app
 
         def self.controller_name
           "#{model.to_s.demodulize.downcase.pluralize}"
@@ -35,7 +37,7 @@ module Sinatra
         def self.model_name
           "#{model.to_s.demodulize.downcase}"
         end
-        
+
         def self.model
           model
         end
@@ -68,10 +70,15 @@ module Sinatra
           block.bind(self).call(wants)
           halt 404 if wants[format].nil?
 
+          # TODO: Add support for data in format's other than form-data
+#          params['person'] = case format
+#            when :json ; ActiveSupport::JSON.decode(request.body)
+#          end
+
           wants[format].call
         end
       end
-    
+
       def route_handler(resource_klass, method)
         lambda do |wants|
           resource = resource_klass.new
@@ -80,15 +87,15 @@ module Sinatra
           resource.method(method).call
         end
       end
-    
+
       def setup_routes(model, resource)
         name = model.to_s.demodulize.downcase
 
-        get_with_formats    "/#{name.pluralize}", {}, &route_handler(resource, :index)    unless resource.instance_methods.index(:index).nil?
-        get_with_formats    "/#{name}/:id",       {}, &route_handler(resource, :show)     unless resource.instance_methods.index(:show).nil?
-        post_with_formats   "/#{name}",           {}, &route_handler(resource, :create)   unless resource.instance_methods.index(:create).nil?
-        put_with_formats    "/#{name}/:id",       {}, &route_handler(resource, :update)   unless resource.instance_methods.index(:update).nil?
-        delete_with_formats "/#{name}/:id",       {}, &route_handler(resource, :destroy)  unless resource.instance_methods.index(:destroy).nil?
+        get_with_formats    "/#{name.pluralize}",     {}, &route_handler(resource, :index)    unless resource.instance_methods.index(:index).nil?
+        get_with_formats    "/#{name.pluralize}/:id", {}, &route_handler(resource, :show)     unless resource.instance_methods.index(:show).nil?
+        post_with_formats   "/#{name.pluralize}",     {}, &route_handler(resource, :create)   unless resource.instance_methods.index(:create).nil?
+        put_with_formats    "/#{name.pluralize}/:id", {}, &route_handler(resource, :update)   unless resource.instance_methods.index(:update).nil?
+        delete_with_formats "/#{name.pluralize}/:id", {}, &route_handler(resource, :destroy)  unless resource.instance_methods.index(:destroy).nil?
       end
   end
 

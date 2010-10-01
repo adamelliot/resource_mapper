@@ -45,21 +45,61 @@ module ResourceMapper
       end
     end
 
-    def read_params(*args)
+    def read_attrs(*args)
       class_eval <<-"end_eval", __FILE__, __LINE__
-        def read_params
-          {:only => #{args}}
+        def index_attrs
+          #{args}
         end
-      end_eval
-    end
 
-    def write_params(*args)
-      class_eval <<-"end_eval", __FILE__, __LINE__
-        def write_params
+        def show_attrs
           #{args}
         end
       end_eval
     end
-    
+
+    def index_attrs(*args)
+      class_eval <<-"end_eval", __FILE__, __LINE__
+        def index_attrs
+          #{args}
+        end
+      end_eval
+    end
+
+    def show_attrs(*args)
+      class_eval <<-"end_eval", __FILE__, __LINE__
+        def show_attrs
+          #{args}
+        end
+      end_eval
+    end
+
+    def write_attrs(*args)
+      class_eval <<-"end_eval", __FILE__, __LINE__
+        def create_attrs
+          #{args}
+        end
+
+        def update_attrs
+          #{args}
+        end
+      end_eval
+    end
+
+    def create_attrs(*args)
+      class_eval <<-"end_eval", __FILE__, __LINE__
+        def create_attrs
+          #{args}
+        end
+      end_eval
+    end
+
+    def update_attrs(*args)
+      class_eval <<-"end_eval", __FILE__, __LINE__
+        def update_attrs
+          #{args}
+        end
+      end_eval
+    end
+
   end
 end

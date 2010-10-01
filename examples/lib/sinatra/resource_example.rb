@@ -1,5 +1,5 @@
 describe Sinatra::Resource do
-  
+
   class BasicApp < Sinatra::Base
     register Sinatra::Resource
     resource Person
@@ -13,41 +13,41 @@ describe Sinatra::Resource do
     def app
       BasicApp
     end
-    
+
     before :each do
       Person.reset!
     end
 
     it "returns all people in JSON" do
-      get '/people'
+      get '/people.json'
       last_response.body.should == Person.all.to_json
     end
-    
+
     it "returns a specific person as a JSON object" do
-      get '/person/2'
+      get '/people/2.json'
       last_response.body.should == Person.find(2).to_json
     end
-    
+
     it "creates a new person and return the JSON object" do
       len = Person.all.length
-      post '/person.json', {:person => {:id => 4, :name => 'Seth'}}
+      post '/people.json', {:person => {:id => 4, :name => 'Seth'}}
       Person.all.length.should == len + 1
       last_response.body.should == Person.find(4).to_json
     end
 
     it "updates an existing person and returns the JSON object" do
-      put '/person/3.json', {:person => {:id => 3, :name => 'Seth'}}
+      put '/people/3.json', {:person => {:id => 3, :name => 'Seth'}}
       Person.find(3).name.should == 'Seth'
       last_response.body.should == Person.find(3).to_json
     end
-    
+
     it "deletes a record and return it's content in JSON" do
       len = Person.all.length
-      delete '/person/3.json'
+      delete '/people/3.json'
       last_response.body.should == ""
       Person.all.length.should == len - 1
     end
-    
+
     it "fails when requesting an invalid resource" do
       get '/error'
       last_response.should_not be_ok
@@ -87,19 +87,19 @@ describe Sinatra::Resource do
 
     it "errors and the records don't get altered" do
       len = Person.all.length
-      delete '/person/1.json'
+      delete '/people/1.json'
       last_response.should_not be_ok
       Person.all.length.should == len
     end
 
     it "sets the name to upper case in the before create section" do
-      post '/person.json', {:person => {:id => 4, :name => 'Adam'}}
+      post '/people.json', {:person => {:id => 4, :name => 'Adam'}}
       last_response.should be_ok
       Person.find(4).name.should == 'ADAM'
     end
 
     it "allows calling of sinatra helpers from the actions in the resource" do
-      put '/person/1.json', {:person => {:name => 'Astro'}}
+      put '/people/1.json', {:person => {:name => 'Astro'}}
       last_response.should be_ok
       Person.find(1).name.should == 'Astro'
     end
@@ -130,21 +130,39 @@ describe Sinatra::Resource do
     def app
       BeforeAndAfterSetsApp
     end
-    
+
     before :each do
       Person.reset!
     end
 
     it "sets the same before action for create and update" do
-      post '/person.json', {:person => {:id => 4, :name => 'Adam'}}
+      post '/people.json', {:person => {:id => 4, :name => 'Adam'}}
       last_response.should be_ok
       Person.find(4).name.should == 'ADAM'
 
-      put '/person/4.json', {:person => {:id => 4, :name => 'Sandra'}}
+      put '/people/4.json', {:person => {:id => 4, :name => 'Sandra'}}
       last_response.should be_ok
       Person.find(4).name.should == 'SANDRA'
     end
-    
+
   end
 
+  class RenderTemplateThroughResourceApp < Sinatra::Base
+    register Sinatra::Resource
+
+    resource Person do
+      index.wants.html { erb '<%= 3 * 3 %>' }
+    end
+  end
+
+  describe "rendering template through a resource" do
+    def app
+      RenderTemplateThroughResourceApp
+    end
+
+    it "displays the erb rendered output" do
+      get '/people'
+      last_response.body.should == '9'
+    end
+  end
 end

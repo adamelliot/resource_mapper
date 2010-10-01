@@ -11,10 +11,11 @@ begin
     gem.homepage = "http://github.com/adamelliot/resource_mapper"
     gem.authors = ["Adam Elliot"]
     gem.add_dependency "sinatra", ">= 1.0"
-    gem.add_dependency "activesupport", ">= 2.3.5"
-    gem.add_dependency "mongo_mapper", ">= 0.7.6"
+    gem.add_dependency "plist", ">= 3.1.0"
+    gem.add_dependency "activesupport", ">= 3.0.0"
+    gem.add_dependency "mongo_mapper", ">= 0.8.4"
     gem.add_development_dependency "micronaut", ">= 0.3.0"
-    gem.add_development_dependency "rack-test", ">= 0.5.3"
+    gem.add_development_dependency "rack-test", ">= 0.5.5"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -26,7 +27,7 @@ begin
   require 'micronaut/rake_task'
   Micronaut::RakeTask.new(:examples) do |examples|
     examples.pattern = 'examples/**/*_example.rb'
-    examples.ruby_opts << '-Ilib -Iexamples -rexamples/example_helper.rb'
+    examples.ruby_opts << '-Ilib -Iexamples -rexample_helper.rb'
   end
 
   Micronaut::RakeTask.new(:rcov) do |examples|

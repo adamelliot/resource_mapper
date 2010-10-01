@@ -1,4 +1,4 @@
-# Shamelessly take from sinatra-rest, adjusted for JSON
+# Shamelessly taken from sinatra-rest, adjusted for JSON
 require 'active_support/json'
 
 class Person
