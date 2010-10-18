@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<sinatra>, [">= 1.0"])
       s.add_runtime_dependency(%q<plist>, [">= 3.1.0"])
-      s.add_runtime_dependency(%q<builder>, [">= 3.1.0"])
+      s.add_runtime_dependency(%q<builder>, [">= 2.1.2"])
       s.add_runtime_dependency(%q<activesupport>, [">= 3.0.0"])
       s.add_runtime_dependency(%q<mongo_mapper>, [">= 0.8.4"])
       s.add_development_dependency(%q<micronaut>, [">= 0.3.0"])
@@ -67,7 +67,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<sinatra>, [">= 1.0"])
       s.add_dependency(%q<plist>, [">= 3.1.0"])
-      s.add_dependency(%q<builder>, [">= 3.1.0"])
+      s.add_dependency(%q<builder>, [">= 2.1.2"])
       s.add_dependency(%q<activesupport>, [">= 3.0.0"])
       s.add_dependency(%q<mongo_mapper>, [">= 0.8.4"])
       s.add_dependency(%q<micronaut>, [">= 0.3.0"])
@@ -76,7 +76,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<sinatra>, [">= 1.0"])
     s.add_dependency(%q<plist>, [">= 3.1.0"])
-    s.add_dependency(%q<builder>, [">= 3.1.0"])
+    s.add_dependency(%q<builder>, [">= 2.1.2"])
     s.add_dependency(%q<activesupport>, [">= 3.0.0"])
     s.add_dependency(%q<mongo_mapper>, [">= 0.8.4"])
     s.add_dependency(%q<micronaut>, [">= 0.3.0"])

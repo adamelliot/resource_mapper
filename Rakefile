@@ -12,7 +12,7 @@ begin
     gem.authors = ["Adam Elliot"]
     gem.add_dependency "sinatra", ">= 1.0"
     gem.add_dependency "plist", ">= 3.1.0"
-    gem.add_dependency "builder", ">= 3.1.0"
+    gem.add_dependency "builder", ">= 2.1.2"
     gem.add_dependency "activesupport", ">= 3.0.0"
     gem.add_dependency "mongo_mapper", ">= 0.8.4"
     gem.add_development_dependency "micronaut", ">= 0.3.0"
