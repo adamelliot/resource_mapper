@@ -165,4 +165,56 @@ describe Sinatra::Resource do
       last_response.body.should == '9'
     end
   end
+  
+  class RestrictWritingUnderActions < Sinatra::Base
+    register Sinatra::Resource
+
+    resource Person do
+      index_attrs :name, :phone, :kitty
+      show_attrs :id, :name
+      create_attrs :id, :name
+      update_attrs :phone
+    end
+  end
+  
+  describe "restricting attributes based on action", :focused => true do
+    def app
+      RestrictWritingUnderActions
+    end
+    
+    before :each do
+      Person.reset!
+    end
+    
+    it "restricts the output for the index action" do
+      Person.clear!
+      Person.new(1, "Astro", '555-5555').save
+      get '/people.json'
+      last_response.should be_ok
+      last_response.body.should_not =~ /"id":1/
+    end
+
+    it "restricts the output for the show action" do
+      Person.clear!
+      Person.new(1, "Astro", '555-5555').save
+      get '/people/1.json'
+      last_response.should be_ok
+      last_response.body.should_not =~ /555\-5555/
+    end
+
+    it "restricts saved attributes for the create action" do
+      post '/people.json', {:person => {:id => 4, :name => 'Adam', :phone => '555-9999'}}
+      last_response.should be_ok
+      Person.find(4).phone.should == nil
+      Person.find(4).name.should == 'Adam'
+    end
+
+    it "restricts saved attributes for the update action" do
+      name = Person.find(1).name
+      put '/people/1.json', {:person => {:name => 'Adam', :phone => '555-9999'}}
+      last_response.should be_ok
+      Person.find(1).phone.should == '555-9999'
+      Person.find(1).name.should == name
+    end
+  end
 end

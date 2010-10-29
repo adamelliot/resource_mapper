@@ -4,14 +4,17 @@ require 'active_support/json'
 class Person
   attr_accessor :id
   attr_accessor :name
+  attr_accessor :phone
 
   def initialize(*args)
     if args.size == 0
       @id = nil
       @name = nil
-    elsif args.size == 2
+      @phone = nil
+    elsif args.size == 3
       @id = args[0].to_i
       @name = args[1]
+      @phone = args[2]
     else args.size == 1
       update_attributes(args[0])
     end
@@ -36,11 +39,22 @@ class Person
     unless hash.empty?
       @id = hash['id'].to_i if hash.include?('id')
       @name = hash['name'] if hash.include?('name')
+      @phone = hash['phone'] if hash.include?('phone')
     end
   end
   
-  def to_json(_=nil, _=nil)
-    "{\"id\":#{id.to_json},\"name\":#{name.to_json}}"
+  def to_json(options={})
+    ret = {}
+    puts options
+    if !options[:only].nil?
+      options[:only].each { |key| ret[key] = self.send(key) }
+    else
+      ret[:id] = self.id
+      ret[:name] = self.name
+      ret[:phone] = self.phone
+    end
+
+    ret.to_json
   end
   alias_method :as_json, :to_json
 
@@ -68,9 +82,9 @@ class Person
 
   def self.reset!
     clear!
-    Person.new(1, 'Al').save
-    Person.new(2, 'Sol').save
-    Person.new(3, 'Alma').save
+    Person.new(1, 'Al', '555-1234').save
+    Person.new(2, 'Sol', '555-6666').save
+    Person.new(3, 'Alma', '555-5555').save
   end
 end
 

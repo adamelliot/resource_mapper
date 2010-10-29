@@ -14,7 +14,7 @@ module ResourceMapper
         # In order to customize the way the collection is fetched, to add something like pagination, for example, override this method.
         #
         def collection
-          end_of_association_chain.all(:fields => index_attrs)
+          end_of_association_chain.all
         end
 
         # Returns the current param for key.
@@ -42,7 +42,7 @@ module ResourceMapper
         #   end
         #
         def object
-          @object ||= end_of_association_chain.first({key => param, :fields => show_attrs}) unless param.nil?
+          @object ||= end_of_association_chain.first({key => param}) unless param.nil?
           @object
         end
 
